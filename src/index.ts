@@ -1,10 +1,20 @@
 import "dotenv/config";
 
-import { postgresHelper } from "./db/postgres/helper";
+import cors from "cors";
+import express from "express";
 
-async function teste() {
-  const data = await postgresHelper("SELECT 1 + 1 as result", []);
-  console.log(data);
-}
+import { env } from "./config";
 
-teste();
+const app = express();
+const port = env.API_PORT;
+
+app.use(cors());
+app.use(express.json());
+
+app.get("/teste", (_req, res) => {
+  return res.json({ message: "Connected" });
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
