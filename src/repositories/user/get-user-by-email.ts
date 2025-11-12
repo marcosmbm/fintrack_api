@@ -5,6 +5,7 @@ export interface GetUserByEmailRepositoryOutput {
   first_name: string;
   last_name: string;
   email: string;
+  password: string;
 }
 
 export class GetUserByEmailRepository {
@@ -15,6 +16,7 @@ export class GetUserByEmailRepository {
           u.id,
           u.first_name,
           u.last_name,
+          u.email,
           u."password"
         from users u
         where u.email = $1
