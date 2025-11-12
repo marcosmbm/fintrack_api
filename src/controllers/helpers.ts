@@ -19,3 +19,7 @@ export function errorHandler(error: unknown) {
 export function created<T = unknown>(body: T) {
   return makeHttpResponse(201, body);
 }
+
+export function ok<T = unknown>(body: T) {
+  return makeHttpResponse(200, body);
+}

@@ -4,7 +4,7 @@ import cors from "cors";
 import express from "express";
 
 import { env } from "./config";
-import { CreateUserController } from "./controllers";
+import { CreateUserController, GetUserByIdController } from "./controllers";
 
 const app = express();
 const port = env.API_PORT;
@@ -20,6 +20,12 @@ app.get("/teste", (_req, res) => {
 app.post("/users", async (req, res) => {
   const createUserController = new CreateUserController();
   const { statusCode, body } = await createUserController.execute(req);
+  return res.status(statusCode).json(body);
+});
+
+app.get("/users/:id", async (req, res) => {
+  const getUserByIdController = new GetUserByIdController();
+  const { statusCode, body } = await getUserByIdController.execute(req);
   return res.status(statusCode).json(body);
 });
 
