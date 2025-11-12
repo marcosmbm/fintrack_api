@@ -5,4 +5,5 @@ export const env = {
   DATABASE_PORT: Number(process.env.DATABASE_PORT),
   DATABASE_NAME: process.env.DATABASE_NAME,
   API_PORT: Number(process.env.API_PORT),
+  BCRYPT_SALT: Number(process.env.BCRYPT_SALT),
 };
