@@ -3,6 +3,8 @@ import validator from "validator";
 
 import { CreateUserUseCase } from "@/use-cases";
 
+import { badRequest, created, errorHandler } from "../helpers";
+
 export class CreateUserController {
   async execute(req: Request) {
     try {
@@ -15,14 +17,14 @@ export class CreateUserController {
         const isFieldMissing = !data[field];
 
         if (isFieldMissing) {
-          throw new Error(`${field} is required.`);
+          return badRequest({ message: `Missing field: ${field}` });
         }
       }
 
       const isEmailValid = validator.isEmail(data.email);
 
       if (!isEmailValid) {
-        throw new Error("Invalid email.");
+        return badRequest({ message: "Invalid email." });
       }
 
       //validar tamanho de senha
@@ -35,24 +37,17 @@ export class CreateUserController {
       });
 
       if (!isPasswordValid) {
-        throw new Error("Password must be at least 6 characters long.");
+        return badRequest({
+          message: "Password must be at least 6 characters long.",
+        });
       }
 
       const user = await new CreateUserUseCase().execute(data);
 
       //retornar a resposta para o client (status code 201 e body)
-      return {
-        statusCode: 201,
-        body: user,
-      };
+      return created(user);
     } catch (error: unknown) {
-      return {
-        statusCode: 500,
-        body: {
-          message:
-            error instanceof Error ? error.message : "Internal server error",
-        },
-      };
+      return errorHandler(error);
     }
   }
 }
