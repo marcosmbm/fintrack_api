@@ -1,3 +1,5 @@
+import { EmailAreadyInUseError, UserNotFoundError } from "@/errors";
+
 export function makeHttpResponse<T = unknown>(statusCode: number, body: T) {
   return { statusCode, body };
 }
@@ -10,7 +12,17 @@ export function internalServerError(body: unknown) {
   return makeHttpResponse(500, body);
 }
 
+export function notFound(body: unknown) {
+  return makeHttpResponse(404, body);
+}
+
 export function errorHandler(error: unknown) {
+  if (error instanceof EmailAreadyInUseError)
+    return badRequest({ message: error.message });
+
+  if (error instanceof UserNotFoundError)
+    return notFound({ message: error.message });
+
   if (error instanceof Error) return badRequest({ message: error.message });
 
   return internalServerError({ message: "Internal server error." });

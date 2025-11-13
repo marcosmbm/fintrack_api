@@ -1,3 +1,4 @@
+import { UserNotFoundError } from "@/errors";
 import { GetUserByIdRepository } from "@/repositories";
 
 export class GetUserByIdUseCase {
@@ -5,7 +6,7 @@ export class GetUserByIdUseCase {
     const user = await new GetUserByIdRepository().execute(userId);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new UserNotFoundError(userId);
     }
 
     return user;

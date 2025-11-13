@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 
 import { env } from "@/config";
+import { EmailAreadyInUseError } from "@/errors";
 import { CreateUserRepository, GetUserByEmailRepository } from "@/repositories";
 
 export interface CreateUserUseCaseInput {
@@ -18,7 +19,7 @@ export class CreateUserUseCase {
     );
 
     if (userAlreadyExists) {
-      throw new Error("User already exists");
+      throw new EmailAreadyInUseError(data.email);
     }
 
     const userId = uuidv4();
